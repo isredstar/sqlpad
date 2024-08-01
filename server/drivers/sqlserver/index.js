@@ -1,6 +1,6 @@
-const mssql = require('mssql');
-const { formatSchemaQueryResults } = require('../utils');
-const { resolvePositiveNumber } = require('../../lib/resolve-number');
+import mssql from 'mssql';
+import { formatSchemaQueryResults } from '../utils.js';
+import { resolvePositiveNumber } from '../../lib/resolve-number.js';
 
 const id = 'sqlserver';
 const name = 'SQL Server';
@@ -43,6 +43,7 @@ function runQuery(query, connection) {
       encrypt: Boolean(connection.sqlserverEncrypt),
       multiSubnetFailover: connection.sqlserverMultiSubnetFailover,
       readOnlyIntent: connection.readOnlyIntent,
+      trustServerCertificate: Boolean(connection.trustServerCertificate),
       // Set enableArithAbort to avoid following log message:
       // tedious deprecated The default value for `config.options.enableArithAbort`
       // will change from `false` to `true` in the next major version of `tedious`.
@@ -184,6 +185,11 @@ const fields = [
     label: 'ReadOnly Application Intent',
   },
   {
+    key: 'trustServerCertificate',
+    formType: 'CHECKBOX',
+    label: 'Trust Server Certificate',
+  },
+  {
     key: 'maxrows_override',
     formType: 'TEXT',
     label: 'Maximum rows to return',
@@ -191,7 +197,7 @@ const fields = [
   },
 ];
 
-module.exports = {
+export default {
   id,
   name,
   fields,

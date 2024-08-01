@@ -143,12 +143,28 @@ yarn test
 npx mocha test/path/to/file.js --exit
 ```
 
-## Releases
+## Building local docker images
 
-SQLPad tries to follow [semantic versioning](https://semver.org/). As an application, this primarily means breaking HTTP API changes, breaking configuration changes, or major UI design changes will result in a major version bump. Minor and patch version bumps will consist of enhancements and fixes.
+You can build and test the docker file by running the following from the root of the directory. Note that you must have Docker installed and running.
 
-For all enhancements, core SQLPad functionality should not be altered in any major way unless planned for an upcoming major release.
+```sh
+# build image from docker file
+# to build for a different architecture you can do
+# docker build -t localsqlpad . --no-cache=true --platform=linux/amd64
+docker build -t localsqlpad .
 
-The primary means of distributing SQLPad is via Docker Hub images. Images are automatically created off of git tags pushed to the repo matching the version format `v<major>.<minor>.<patch>`.
+# list images built
+docker images
 
-To simplify the creation of package.json version bumps and tag creation, the `scripts/version.sh` may be used to cut a new release. Make updates to `CHANGELOG.md` followed by running `scripts/versions.sh 3.4.5` (or whatever the version number may be).
+# Run localsqlpad image just built
+# https://docs.docker.com/engine/reference/run/
+docker run -p 3000:3000 -e "SQLPAD_ADMIN=admin@sqlpad.com" -e "SQLPAD_ADMIN_PASSWORD=admin" localsqlpad
+
+# Now in browser you can open sqlpad at http://localhost:3000
+```
+
+In the event that a specific architecture needs to be tested, say an amd64 image to run on arm64, you can pull a dockerhub image based on specific sha.
+
+```sh
+docker run -p 3000:3000 -e "SQLPAD_ADMIN=admin@sqlpad.com" -e "SQLPAD_ADMIN_PASSWORD=admin" sqlpad/sqlpad@sha256:b80b4ab2af32ed07479d9233327bf3e5352fc71b41245d8e73b6403361be266a
+```

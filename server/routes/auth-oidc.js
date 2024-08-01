@@ -1,7 +1,8 @@
-require('../typedefs');
-const passport = require('passport');
-const appLog = require('../lib/app-log');
-const router = require('express').Router();
+import '../typedefs.js';
+import passport from 'passport';
+import appLog from '../lib/app-log.js';
+import express from 'express';
+const router = express.Router();
 
 /**
  * @param {Req} req
@@ -13,7 +14,6 @@ const router = require('express').Router();
  *
  * These workarounds should be fine for both openid-client and passport-openidconnect
  * https://github.com/panva/node-openid-client/issues/146
- * https://github.com/jaredhanson/passport/pull/680
  */
 function handleOidcCallback(req, res, next) {
   const { config } = req;
@@ -62,24 +62,13 @@ function handleOidcCallback(req, res, next) {
     return redirectUser(err, user);
   }
 
-  // If legacy oidc is configured authenticate with that mechanism
-  // Otherwise use oidc implementation based on openid-client
-  if (config.oidcLegacyConfigured()) {
-    return passport.authenticate('oidc-legacy', handleAuth)(req, res, next);
-  }
   return passport.authenticate('oidc', handleAuth)(req, res, next);
 }
 
 router.get('/auth/oidc', (req, res, next) => {
-  const { config } = req;
-  // If legacy oidc is configured authenticate with that mechanism
-  // Otherwise use oidc implementation based on openid-client
-  if (config.oidcLegacyConfigured()) {
-    return passport.authenticate('oidc-legacy')(req, res, next);
-  }
   return passport.authenticate('oidc')(req, res, next);
 });
 
 router.get('/auth/oidc/callback', handleOidcCallback);
 
-module.exports = router;
+export default router;

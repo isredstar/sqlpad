@@ -1,16 +1,19 @@
 /* eslint-disable class-methods-use-this */
-const appLog = require('../app-log');
-const configItems = require('./config-items');
-const validateConnection = require('../validate-connection');
-const {
+import appLog from '../app-log.js';
+
+import configItems from './config-items.js';
+import validateConnection from '../validate-connection.js';
+
+import {
   getFromCli,
   getFromDefault,
   getFromEnv,
   getOldConfigWarning,
   parseConnectionsFromEnv,
   isConnectionEnv,
-} = require('./config-utils');
-const drivers = require('../../drivers');
+} from './config-utils.js';
+
+import drivers from '../../drivers/index.js';
 
 const REMOVED_ENVS = [
   'CERT_PASSPHRASE',
@@ -260,32 +263,19 @@ class Config {
     );
   }
 
-  oidcLegacyConfigured() {
-    return Boolean(
-      this.all.publicUrl &&
-        this.all.oidcClientId &&
-        this.all.oidcClientSecret &&
-        this.all.oidcIssuer &&
-        this.all.oidcAuthorizationUrl &&
-        this.all.oidcTokenUrl &&
-        this.all.oidcUserInfoUrl
-    );
-  }
-
   // oidc configured only needs to check for minimal setup
   // With newer openid-client we can detect auth/token/user urls
-  // If detecting the endpoints is not available, many additional oidc config options need to be provided
-  // This can happen after passport-openidconnect is removed
   oidcConfigured() {
     return Boolean(
       this.all.publicUrl &&
         this.all.oidcClientId &&
         this.all.oidcClientSecret &&
-        this.all.oidcIssuer &&
-        // The additional URLs *should not* be specified
-        !this.all.oidcAuthorizationUrl &&
-        !this.all.oidcTokenUrl &&
-        !this.all.oidcUserInfoUrl
+        this.all.oidcIssuer
+      // TODO map these to oidc implementation if necessary
+      // These were used for passport-openidconnect, but not openid-client
+      // this.all.oidcAuthorizationUrl &&
+      // this.all.oidcTokenUrl &&
+      // this.all.oidcUserInfoUrl
     );
   }
 
@@ -321,4 +311,4 @@ class Config {
   }
 }
 
-module.exports = Config;
+export default Config;

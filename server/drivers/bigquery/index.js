@@ -1,6 +1,6 @@
-const { BigQuery } = require('@google-cloud/bigquery');
-const { formatSchemaQueryResults } = require('../utils');
-const minimist = require('minimist');
+import { BigQuery } from '@google-cloud/bigquery';
+import { formatSchemaQueryResults } from '../utils.js';
+import { getConfigRef } from '../../lib/config/config-store.js';
 
 const id = 'bigquery';
 const name = 'BigQuery';
@@ -38,15 +38,12 @@ function retry(
 /**
  * Return the query timeout in seconds from the app config.
  */
-let _timeoutSeconds;
 function getTimeoutSeconds() {
-  if (!_timeoutSeconds) {
-    const Config = require('../../lib/config');
-    const argv = minimist(process.argv.slice(2));
-    const config = new Config(argv, process.env);
-    _timeoutSeconds = config.get('timeoutSeconds'); // This is the HTTP connection timeout used by the SQLPad backend
-  }
-  return _timeoutSeconds;
+  const config = getConfigRef();
+  // This is the HTTP connection timeout used by the SQLPad backend
+  // It may not exist if this is executing outside the scope of the application
+  // In that case, return a stubbed in default
+  return config?.get('timeoutSeconds') ?? 300;
 }
 
 /**
@@ -120,7 +117,7 @@ function runQuery(queryString, connection = {}) {
         }
       );
     })
-    .then(([rows]) => {
+    .then(([rows, nextPage]) => {
       if (rows.length === 0) {
         const t2 = process.hrtime(t1);
         if (t2[0] >= timeoutSeconds) {
@@ -130,6 +127,8 @@ function runQuery(queryString, connection = {}) {
 
       if (isMaxRowsSpecified && rows.length > connection.maxRows) {
         rows.splice(connection.maxRows);
+        incomplete = true;
+      } else if (nextPage) {
         incomplete = true;
       }
 
@@ -175,9 +174,14 @@ function getSchema(connection) {
     )
     .then(([tables]) =>
       Promise.all(
-        tables.map((table) =>
-          bigquery.dataset(table.dataset_id).table(table.table_id).getMetadata()
-        )
+        tables
+          .filter((table) => !table.table_id.startsWith('_SEARCH_INDEX_'))
+          .map((table) =>
+            bigquery
+              .dataset(table.dataset_id)
+              .table(table.table_id)
+              .getMetadata()
+          )
       )
     )
     .then((tables) => {
@@ -227,7 +231,7 @@ const fields = [
   },
 ];
 
-module.exports = {
+export default {
   id,
   name,
   fields,

@@ -1,8 +1,102 @@
 # Changelog
 
+## [7.4.4] - 2024-07-21
+
+- Update dependencies
+
+## [7.4.3] - 2024-05-12
+
+- Update dependencies
+
+## [7.4.2] - 2024-04-24
+
+- Update dependencies
+
+## [7.4.1] - 2024-02-24
+
+- Update dependencies
+
+## [7.4.0] - 2024-02-03
+
+- Node 18 required
+- Show incomplete on truncated response from BigQuery (#1224)
+- Update dependencies
+
+## [7.3.1] - 2024-01-30
+
+- Revert odbc implementation to CJS
+
+## [7.3.0] - 2024-01-27
+
+- Restore arm64 container build
+- Convert server code to ESM
+
+## [7.2.0] - 2023-12-23
+
+- Add extra result display formats and copy-to-clipboard (#1209)
+- Fix helm chart postgres dependency (#1212)
+- Fix BigQuery indexes schema panel (#1214)
+
+## [7.1.3] - 2023-10-29
+
+- Update dependencies
+
+## [7.1.2] - 2023-08-16
+
+- Revert dockerfile node version to node 16
+
+## [7.1.1] - 2023-08-09
+
+- Update dependencies
+
+## [7.1.0] - 2023-06-18
+
+- [Remove snowflake support](https://github.com/sqlpad/sqlpad/pull/1191)
+- Fix docker-entrypoint script to allow setting env vars [#1192](https://github.com/sqlpad/sqlpad/pull/1192)
+- Update dependencies
+
+## [7.0.5] - 2023-05-02
+
+- Update dependencies
+
+## [7.0.4] - 2023-04-22
+
+- Update dependencies
+
+## [7.0.3] - 2023-03-19
+
+- Updates clickhouse implementation to [official nodejs driver](https://clickhouse.com/docs/en/integrations/language-clients/nodejs). At time of release, compatible Clickhouse versions are 22.8 - 23.2.
+- Updates dependencies
+
+## [7.0.2] - 2023-03-06
+
+- Update dependencies
+
+## [7.0.1] - 2023-02-21
+
+- Add "Trust Server Cert" option for SQL Server connections
+- Update dependencies (minor and patch)
+
+## [7.0.0] - 2022-12-03
+
+- Update dependencies - potentially breaking changes for auth due to dependency updates.
+- Change in versioning scheme. Semver will no longer be followed.
+
+## [6.11.4] - 2022-12-02
+
+- Update dependencies
+
+## [6.11.3] - 2022-11-16
+
+- Update dependencies
+
+## [6.11.2] - 2022-09-25
+
+- Update dependencies
+
 ## [6.11.1] - 2022-06-07
 
-- Remove connection password from connection list API. This matches the behavior for connection detail.
+- Remove connection password from connection list API. This matches the behavior for connection detail API.
 - Update dependencies
 
 ## [6.11.0] - 2022-04-12

@@ -1,6 +1,6 @@
 # Need to remote into this image and debug some flow? 
-# docker run -it --rm node:12.22.1-alpine3.12 /bin/ash
-FROM node:lts-buster AS build
+# docker run -it --rm node:18-slim /bin/ash
+FROM node:18-slim AS build
 ARG ODBC_ENABLED=false
 RUN apt-get update && apt-get install -y \
     python3 make g++ python3-dev  \
@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
     fi\
     ) \
     && rm -rf /var/lib/apt/lists/*
-RUN npm config set python /usr/bin/python3
+# RUN npm config set python /usr/bin/python3
 
 WORKDIR /sqlpad
 
@@ -31,11 +31,13 @@ COPY ./client/yarn* ./client/
 COPY ./server/yarn* ./server/
 
 # Install dependencies
+# Timeout increase necessary for mdi-react timeout
+RUN yarn config set network-timeout 600000 -g
 RUN yarn
 WORKDIR /sqlpad/client
 RUN yarn
 WORKDIR /sqlpad/server
-RUN yarn
+RUN yarn --production
 WORKDIR /sqlpad
 
 # Copy rest of the project into docker
@@ -47,23 +49,9 @@ RUN npm run build --prefix client && \
     mkdir server/public && \
     cp -r client/build/* server/public
 
-# Build test db used for dev, debugging and running tests
-RUN node server/generate-test-db-fixture.js
-
-# Run tests and linting to validate build
-ENV SKIP_INTEGRATION true
-RUN npm run test --prefix server
-RUN npm run lint
-
-# Remove any dev dependencies from server
-# We don't care about root or client directories 
-# as they are not going to be copied to next stage
-WORKDIR /sqlpad/server
-RUN npm prune --production
-
 # Start another stage with a fresh node
 # Copy the server directory that has all the necessary node modules + front end build
-FROM node:lts-buster-slim as bundle
+FROM node:18-slim as bundle
 ARG ODBC_ENABLED=false
 
 # Create a directory for the hooks and optionaly install ODBC

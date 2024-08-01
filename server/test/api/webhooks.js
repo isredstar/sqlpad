@@ -1,6 +1,9 @@
 /* eslint-disable no-await-in-loop */
-const assert = require('assert');
-const TestUtils = require('../utils');
+import assert from 'assert';
+import TestUtils from '../utils.js';
+import serverDirname from '../../server-dirname.cjs';
+import fs from 'fs';
+import path from 'path';
 
 /**
  * Logs body to a JSON file. Useful for debug/generating JSON examples for documentation
@@ -8,10 +11,8 @@ const TestUtils = require('../utils');
  */
 // eslint-disable-next-line no-unused-vars
 function logBody(body) {
-  const fs = require('fs');
-  const path = require('path');
   fs.writeFileSync(
-    path.join(__dirname, '/webhook.json'),
+    path.join(serverDirname, 'test/artifacts/webhook.json'),
     JSON.stringify(body, null, 2),
     'utf8'
   );
@@ -44,6 +45,7 @@ describe('api/webhooks', function () {
     });
 
     await wait(200);
+    await hookServer.close();
     assert.equal(hookServer.responses.length, 0);
   });
 
@@ -67,7 +69,7 @@ describe('api/webhooks', function () {
     });
 
     await wait(200);
-
+    await hookServer.close();
     assert.deepStrictEqual(hookServer.responses[0].body, {
       action: 'user_created',
       sqlpadUrl: 'http://mysqlpad.com:9000/sqlpad',
@@ -116,7 +118,7 @@ describe('api/webhooks', function () {
     });
 
     await wait(200);
-
+    await hookServer.close();
     // no secret or url headers this time
     assert.equal(hookServer.responses[0].headers['sqlpad-secret'], '');
 
@@ -188,6 +190,7 @@ describe('api/webhooks', function () {
     const statement1 = statements[0];
 
     await wait(500);
+    await hookServer.close();
 
     const { body: batchCreatedBody } = hookServer.responses.find(
       (r) => r.body.action === 'batch_created'

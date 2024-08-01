@@ -4,11 +4,9 @@ description: Docs intro
 layout: ../../layouts/MainLayout.astro
 ---
 
-
-SQLPad is a web app for writing and running SQL queries and visualizing the results. Supports Postgres, MySQL, SQL Server, ClickHouse, Crate, Vertica, Trino, Presto, Pinot, Drill, SAP HANA, Snowflake, BigQuery, SQLite, TiDB and many others via ODBC.
+SQLPad is a web app for writing and running SQL queries and visualizing the results. Supports Postgres, MySQL, SQL Server, ClickHouse, Crate, Vertica, Trino, Presto, Pinot, Drill, SAP HANA, BigQuery, SQLite, TiDB and many others via ODBC.
 
 <img class="screenshot" src="/images/screenshot.png" alt="SQLPad screenshot" >
-
 
 ## Current Status
 
@@ -16,16 +14,16 @@ SQLPad is in maintenance mode. Security updates and critical bug-fixes will be m
 
 Because of the sensitive nature of this application, the project will not be transferred to any other owner.
 
-
 ## Alternatives
 
 While not exactly alternatives, these open source projects might be of interest:
 
-* [Querybook](https://www.querybook.org/) (open source)
-* [Superset](https://github.com/apache/superset) (open source) / [Preset](https://preset.io/) (company)
-* [Chartbrew](https://github.com/chartbrew/chartbrew) (open source) / [Chartbrew](https://chartbrew.com/) (company)
-* [Lightdash](https://github.com/lightdash/lightdash) (open source) / [Lightdash](https://www.lightdash.com/) (company)
-
+- [Querybook](https://www.querybook.org/) (open source)
+- [Superset](https://github.com/apache/superset) (open source) / [Preset](https://preset.io/) (company)
+- [Chartbrew](https://github.com/chartbrew/chartbrew) (open source) / [Chartbrew](https://chartbrew.com/) (company)
+- [Lightdash](https://github.com/lightdash/lightdash) (open source) / [Lightdash](https://www.lightdash.com/) (company)
+- [CloudBeaver](https://github.com/dbeaver/cloudbeaver) (open source)
+- [Awesome DB tools GUIs](https://github.com/mgramin/awesome-db-tools#gui)
 
 ## Database Support
 
@@ -67,9 +65,6 @@ While not exactly alternatives, these open source projects might be of interest:
     <img src="/images/logo-cassandra.png" data-origin="/images/logo-cassandra.png" alt="Cassandra" >
   </div>
   <div class="db-container">
-    <img src="/images/logo-snowflake.png" data-origin="/images/logo-snowflake.png" alt="Snowflake" >
-  </div>
-  <div class="db-container">
     <img src="/images/logo-bigquery.png" data-origin="/images/logo-bigquery.png" alt="BigQuery" >
   </div>
   <div class="db-container">
@@ -80,5 +75,3 @@ While not exactly alternatives, these open source projects might be of interest:
   </div>
   <div class="db-container">many others via ODBC</div>
 </div>
-
-
